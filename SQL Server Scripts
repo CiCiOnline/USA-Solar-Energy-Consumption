@@ -42,3 +42,33 @@ AND
 /* DELETES VIEW EARLIER CREATED */
 
 DROP VIEW IF EXISTS Energy_Prod_and_Cons_View;
+
+
+
+*/ Create the view again with rounded values that changes multiple decimal place numbers to 3 decimal places instead */
+
+ CREATE VIEW Energy_Prod_and_Con_View AS 
+SELECT 
+    econs.Entity,
+    econs.Code,
+    econs.Year,
+    ROUND(eprod.Electricity_from_wind_TWh, 3) AS Wind_Energy_Production,
+    ROUND(econs.Wind_Generation_TWh, 3) AS Wind_Energy_Consumption,
+    ROUND(eprod.Electricity_from_solar_TWh, 3) AS Solar_Energy_Production,
+    ROUND(econs.Solar_Generation_TWh, 3) AS Solar_Energy_Consumption,
+    ROUND(eprod.Electricity_from_hydro_TWh, 3) AS Hydro_Energy_Production,
+    ROUND(econs.Hydro_Generation_TWh, 3) AS Hydro_Energy_Consumption,
+    ROUND(eprod.Other_renewables_including_bioenergy_TWh, 3) AS Biomass_Other_Energy_Production,
+    ROUND(econs.Geo_Biomass_Other_TWh, 3) AS Biomass_Other_Energy_Consumption
+FROM 
+    [renewable-energy-consumption] AS econs
+JOIN 
+    [modern-renewable-prod] AS eprod
+ON 
+    econs.Entity = eprod.Entity
+AND 
+    econs.Code = eprod.Code
+AND 
+    econs.Year = eprod.Year
+
+
