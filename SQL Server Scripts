@@ -1,0 +1,44 @@
+/*
+DATA MERGING, CLEANING AND SEGMENTATION:
+- Data joined from Table- Renewable Energy Consumption as econs, with Renewable Energy Production as eprod, and Columns renamed in 
+- 
+*/
+
+SELECT *
+FROM [renewable-energy-consumption] AS econs
+JOIN [modern-renewable-prod] AS eprod
+ON econs.Entity = eprod.Entity
+AND econs.Code = eprod.Code
+AND econs.Year = eprod.Year
+
+
+
+CREATE VIEW Energy_Prod_and_Cons_View AS
+SELECT 
+    econs.Entity,
+    econs.Code,
+    econs.Year,
+	eprod.Electricity_from_wind_TWh,
+	econs.Wind_Generation_TWh AS Wind_Energy_Consumption,
+	eprod.Electricity_from_solar_TWh,
+	econs.Solar_Generation_TWh AS Solar_Energy_Consumption,
+	eprod.Electricity_from_hydro_TWh,
+	econs.Hydro_Generation_TWh AS Hydro_Energy_Consumption,
+	eprod.Other_renewables_including_bioenergy_TWh,
+	econs.Geo_Biomass_Other_TWh AS Biomass_Other_Energy_Consumption
+FROM 
+    [renewable-energy-consumption] AS econs
+JOIN 
+    [modern-renewable-prod] AS eprod
+ON 
+    econs.Entity = eprod.Entity
+AND 
+    econs.Code = eprod.Code
+AND 
+    econs.Year = eprod.Year;
+
+
+
+/* DELETES VIEW EARLIER CREATED */
+
+DROP VIEW IF EXISTS Energy_Prod_and_Cons_View;
