@@ -1,3 +1,51 @@
+/* 
+CREATING THE SOLAR_DATA TABLE - Made of columns from 3 seperate tables
+*/
+
+
+SELECT *
+FROM [12 solar-energy-consumption]
+
+SELECT *
+FROM [installed-solar-PV-capacity]
+
+SELECT *
+FROM [Renewable-energy-consumption]
+
+
+
+DROP VIEW IF EXISTS Sum_Solar_Data;
+
+CREATE VIEW Sum_Solar_Data AS
+
+SELECT 
+econs.Entity,
+econs.Code,
+econs.Year,
+insolar.Solar_Capacity,
+solcons.Electricity_from_solar_TWh,
+econs.Solar_Generation_TWh
+
+FROM [Renewable-energy-consumption] AS econs
+JOIN [12 solar-energy-consumption] AS solcons
+ON econs.Entity = solcons.Entity
+AND econs.Code = solcons.Code
+AND econs.Year = solcons.Year
+
+JOIN [installed-solar-PV-capacity] AS insolar
+ON econs.Entity = insolar.Entity
+AND econs.Code = insolar.Code
+AND econs.Year = insolar.Year;
+
+
+SELECT COUNT (*)
+FROM Sum_Solar_Data
+
+
+
+
+
+
 /*
 DATA MERGING, CLEANING AND SEGMENTATION:
 - Data joined from Table- Renewable Energy Consumption as econs, with Renewable Energy Production as eprod, and Columns renamed in 
